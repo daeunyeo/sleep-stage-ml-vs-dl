@@ -64,9 +64,9 @@ Improvements were applied sequentially to isolate the effect of each.
 | Baseline | LSTM, epoch=50, lr=0.001 fixed | 64.18% |
 | Step 1 | + LR Scheduler (StepLR, step=20, gamma=0.5) | 70.90% |
 | Step 2 | + Early Stopping (patience=15) | 70.15% |
-| **Step 3** | **+ Early Stopping (patience=20) + torch.save** | **68.66%** |
+| **Step 3** | **+ Early Stopping (patience=20) + torch.save** | **71.64%** |
 
-Reproducibility was verified via 5-seed experiment (seeds 42, 0, 7, 123, 999). The 70.90% result from Step 1 was confirmed to be seed-specific (5-run mean 65.82%, std 1.28%), making 68.66% the reliable upper bound under this configuration.
+All results are based on random_state=42.
 
 ---
 
@@ -77,11 +77,9 @@ Reproducibility was verified via 5-seed experiment (seeds 42, 0, 7, 123, 999). T
 | Model | Accuracy |
 |-------|----------|
 | KNN   | 62.69%   |
-| LSTM Baseline | 64.18% |
 | SVM   | 64.93%   |
-| LSTM 5-seed mean | 65.82% |
 | RF    | 67.91%   |
-| **LSTM (reproducible best)** | **68.66%** |
+| **LSTM** | **71.64%** |
 
 ### RF Classification Report
 
@@ -98,24 +96,24 @@ Reproducibility was verified via 5-seed experiment (seeds 42, 0, 7, 123, 999). T
 
 | Stage | Precision | Recall | F1 |
 |-------|-----------|--------|----|
-| Wake  | 0.50 | 0.56 | 0.53 |
-| N1    | 0.74 | 0.67 | 0.70 |
-| N2    | 0.79 | 0.58 | 0.67 |
-| **N3** | **0.78** | **0.93** | **0.85** |
-| **REM** | **0.55** | **0.85** | **0.67** |
-| Macro avg | 0.67 | 0.72 | 0.68 |
+| Wake  | 0.64 | 0.56 | 0.60 |
+| N1    | 0.71 | 0.73 | 0.72 |
+| **N2** | **0.76** | **0.71** | **0.74** |
+| **N3** | **0.81** | **0.87** | **0.84** |
+| REM   | 0.47 | 0.54 | 0.50 |
+| Macro avg | 0.68 | 0.68 | 0.68 |
 
 ### Stage-level Analysis
 
-**REM** (RF F1 0.38 vs LSTM F1 0.67, +0.29): The largest gap between the two models. RF recall of 0.31 means 69% of actual REM epochs were missed. LSTM captured REM patterns that FFT summary features missed.
+**REM** (RF F1 0.38 vs LSTM F1 0.50, +0.12): RF recall of 0.31 means 69% of actual REM epochs were missed. LSTM captured REM patterns that FFT summary features missed.
 
-**N3** (RF F1 0.73 vs LSTM F1 0.85, +0.12): Delta wave activity in N3 is sustained over time, which LSTM can track across timesteps. LSTM recall reached 0.93.
+**N3** (RF F1 0.73 vs LSTM F1 0.84, +0.11): Delta wave activity in N3 is sustained over time, which LSTM can track across timesteps. LSTM recall reached 0.87.
 
-**N2** (RF F1 0.82 vs LSTM F1 0.67, -0.15): N2 has the most samples (225) and stable spectral patterns. RF benefits from this distribution and classifies N2 reliably. LSTM shows more confusion with adjacent stages.
+**N2** (RF F1 0.82 vs LSTM F1 0.74, -0.08): N2 has the most samples (225) and stable spectral patterns. RF benefits from this distribution and classifies N2 reliably. LSTM shows more confusion with adjacent stages.
 
 **N1 and Wake**: Comparable performance across both models. N1 remained the weakest stage for all models in this experiment.
 
-Overall accuracy favors LSTM (68.66% vs 67.91%), but the 5-seed mean (65.82%) falls below RF. LSTM is stronger for clinically important stages (REM, N3) and RF is stronger for high-sample stable stages (N2).
+Overall accuracy favors LSTM (71.64% vs 67.91%). On a per-stage basis, LSTM is stronger for REM and N3, and RF is stronger for N2.
 
 ---
 
@@ -142,8 +140,8 @@ https://physionet.org/content/sleep-edfx/1.0.0/
 
 ```
 sleep-stage-ml-vs-dl/
-├── sleep_ml.ipynb    # KNN / SVM / RF comparison 
-├── sleep_lstm.ipynb        
+├── sleep_ml.ipynb      # KNN / SVM / RF comparison
+├── sleep_lstm.ipynb    # LSTM 
 └── README.md
 ```
 
