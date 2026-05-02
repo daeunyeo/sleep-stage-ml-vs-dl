@@ -125,6 +125,7 @@ Neither model is strictly better than the other. Overall accuracy alone does not
 The main structural limitation is that LSTM received pre-computed FFT features rather than raw waveforms. LSTM is designed to learn temporal patterns directly from sequential input. Feeding summarized features reduces its advantage over RF since both models ultimately receive the same 6 numbers per segment. Combined with a dataset of only 668 epochs, deep learning could not fully demonstrate its potential here.
 
 A follow-up experiment applies EEGNet (a depthwise separable CNN designed for EEG) to a larger dataset (DEAP, 32 subjects) with raw signal input to test whether raw signal input and more data improve performance.
+https://github.com/daeunyeo/EEGNet-deap
 
 ---
 
