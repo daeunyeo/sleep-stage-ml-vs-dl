@@ -8,7 +8,7 @@ Comparing KNN, SVM, Random Forest, and LSTM on the same dataset and task to iden
 
 Sleep stage classification assigns one of five labels (Wake, N1, N2, N3, REM) to each 30-second EEG epoch. Accurate classification across all five stages, especially REM and N3, is essential for meaningful sleep quality assessment.
 
-This repository documents a controlled comparison experiment. Three classical ML models (KNN, SVM, Random Forest) were first compared under identical conditions, with RF selected as the best-performing baseline. LSTM was then introduced to test whether modeling the temporal structure of EEG signals improves classification. The ML comparison revealed consistent weakness in REM (RF recall 0.31) and N3, LSTM was introduced to test whether sequential modeling of EEG improves classification for these stages.
+This repository documents a controlled comparison experiment. Three classical ML models (KNN, SVM, Random Forest) were first compared under identical conditions, with RF selected as the best-performing baseline. LSTM was then introduced to test whether modeling the temporal structure of EEG signals improves classification. The ML comparison revealed consistent weakness in REM (RF recall 0.31) across all three models, LSTM was introduced to test whether sequential modeling of EEG improves classification for these stages.
 
 The core question is not which model wins overall, but which model is stronger for which sleep stage and why.
 
@@ -43,6 +43,7 @@ All three models share the same feature set: delta (0.5-4 Hz), theta (4-8 Hz), a
 
 Class imbalance was handled with class_weight='balanced'. Undersampling was tested but discarded as data loss outweighed the balancing benefit. All models were tuned with grid search and 5-fold stratified cross-validation.
 
+Per-stage accuracy for each model (grid search tuned, random_state=42):
 | Stage | KNN | SVM | RF |
 |-------|-----|-----|----|
 | Wake  | 61.5% | 69.2% | 76.9% |
