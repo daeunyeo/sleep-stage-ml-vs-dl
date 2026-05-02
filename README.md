@@ -109,11 +109,13 @@ All results are based on random_state=42.
 
 **N3** (RF F1 0.73 vs LSTM F1 0.84, +0.11): Delta wave activity in N3 is sustained over time, which LSTM can track across timesteps. LSTM recall reached 0.87.
 
-**N2** (RF F1 0.82 vs LSTM F1 0.74, -0.08): N2 has the most samples (225) and stable spectral patterns. RF benefits from this distribution and classifies N2 reliably. LSTM shows more confusion with adjacent stages.
+**N2** (RF F1 0.82 vs LSTM F1 0.74, -0.08): N2 has the most samples (225) and stable spectral patterns. RF benefits from this distribution and classifies N2 reliably. LSTM shows more confusion with adjacent stages. N2 does not require temporal modeling to classify reliably, so LSTM's sequential structure adds complexity without benefit here.
 
 **N1 and Wake**: Comparable performance across both models. N1 remained the weakest stage for all models in this experiment.
 
 Overall accuracy favors LSTM (71.64% vs 67.91%). On a per-stage basis, LSTM is stronger for REM and N3, and RF is stronger for N2.
+
+Neither model is strictly better than the other. Overall accuracy alone does not capture which stages each model handles well. The appropriate choice depends on the target use case: if REM and N3 detection matters most (sleep quality assessment, clinical screening), LSTM is the better fit. If stable high-sample stages like N2 are the priority, RF is a more practical choice when the target stages have stable spectral patterns and sufficient samples.
 
 ---
 
@@ -141,7 +143,7 @@ https://physionet.org/content/sleep-edfx/1.0.0/
 ```
 sleep-stage-ml-vs-dl/
 ├── sleep_ml.ipynb      # KNN / SVM / RF comparison
-├── sleep_lstm.ipynb    # LSTM 
+├── sleep_lstm.ipynb    # LSTM training and evaluation
 └── README.md
 ```
 
